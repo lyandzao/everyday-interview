@@ -116,3 +116,41 @@ div.child{
   margin:auto;
 }
 ```
+
+## 3.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
+
+> 1. display: none (不占空间，不能点击, 会发生回流)（场景，显示出原来这里不存在的结构）
+> 2. visibility: hidden（占据空间，不能点击, 会发生重绘）（场景：显示不会导致页面结构发生变动，不会撑开）
+> 3. opacity: 0（占据空间，可以点击）（场景：可以跟transition搭配）
+
+```
+补充：株连性
+如果祖先元素遭遇某祸害，则其子孙孙无一例外也要遭殃，比如：
+opacity:0和display:none，若父节点元素应用了opacity:0和display:none，无论其子孙元素如何挣扎都不会再出现在大众视野；
+而若父节点元素应用visibility:hidden，子孙元素应用visibility:visible，那么其就会毫无意外的显现出来。
+```
+
+- `display: none;`
+
+1. **DOM 结构**：浏览器不会渲染 `display` 属性为 `none` 的元素，不占据空间；
+2. **事件监听**：无法进行 DOM 事件监听；
+3. **性能**：动态改变此属性时会引起重排，性能较差；
+4. **继承**：不会被子元素继承，毕竟子类也不会被渲染；
+5. **transition**：`transition` 不支持 `display`。
+
+- `visibility: hidden;`
+
+1. **DOM 结构**：元素被隐藏，但是会被渲染不会消失，占据空间；
+2. **事件监听**：无法进行 DOM 事件监听；
+3. **性 能**：动态改变此属性时会引起重绘，性能较高；
+4. **继 承**：会被子元素继承，子元素可以通过设置 `visibility: visible;` 来取消隐藏；
+5. **transition**：`transition` 支持 `display`。
+
+- opacity: 0;
+
+1. **DOM 结构**：透明度为 100%，元素隐藏，占据空间；
+2. **事件监听**：可以进行 DOM 事件监听；
+3. **性 能**：提升为合成层，不会触发重绘，性能较高；
+4. **继 承**：会被子元素继承,且，子元素并不能通过 `opacity: 1` 来取消隐藏；
+5. **transition**：`transition` 支持 `opacity`。
+
