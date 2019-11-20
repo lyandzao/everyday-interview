@@ -154,3 +154,14 @@ opacity:0和display:none，若父节点元素应用了opacity:0和display:none�
 4. **继 承**：会被子元素继承,且，子元素并不能通过 `opacity: 1` 来取消隐藏；
 5. **transition**：`transition` 支持 `opacity`。
 
+## 4.已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改。
+
+`<img src="1.jpg" style="width:480px!important;”>`
+
+
+
+1. `<img src="1.jpg" style="width:480px!important; max-width: 300px">`
+2. `<img src="1.jpg" style="width:480px!important; transform: scale(0.625, 1);" >`
+3. `<img src="1.jpg" style="width:480px!important; width:300px!important;">`
+4. `js修改`
+
