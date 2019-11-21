@@ -233,7 +233,6 @@ css:.main{   width: 100px;   height: 100px;}.main::after{  content: '';  width: 
 
 
 <iframe name="cp_embed_1" src="https://codepen.io/wz71014q/embed/yWbxjp?height=265&amp;theme-id=0&amp;default-tab=html%2Cresult&amp;user=wz71014q&amp;slug-hash=yWbxjp&amp;pen-title=yWbxjp&amp;name=cp_embed_1" scrolling="no" frameborder="0" height="265" allowtransparency="true" allowfullscreen="true" allowpaymentrequest="true" title="yWbxjp" class="cp_embed_iframe " id="cp_embed_yWbxjp" style="width: 828px; overflow: hidden; display: block;"></iframe>
-
 1. 如果 position 属性是 absolute 或 fixed，包含块也可能是由满足以下条件的最近父级元素的内边距区的边缘组成的：
 
    > transform 或 perspective 值不为 none；
@@ -295,7 +294,6 @@ BFC特点：
 
 
 <iframe name="cp_embed_2" src="https://codepen.io/wz71014q/embed/JqNeVL?height=265&amp;theme-id=0&amp;default-tab=html%2Cresult&amp;user=wz71014q&amp;slug-hash=JqNeVL&amp;pen-title=JqNeVL&amp;name=cp_embed_2" scrolling="no" frameborder="0" height="265" allowtransparency="true" allowfullscreen="true" allowpaymentrequest="true" title="JqNeVL" class="cp_embed_iframe " id="cp_embed_JqNeVL" style="width: 828px; overflow: hidden; display: block;"></iframe>
-
 #### IFC
 
 - 行内元素可以产生行内格式化上下文
@@ -312,3 +310,39 @@ BFC特点：
 网格布局格式化上下文，当为一个元素设置display值为grid的时候，此元素将会获得一个独立的渲染区域
 
 最后，解释一下为什么上面的元素可以居中。行内框的高度能够容纳它包含的所有框,当框的高度小于行内框的高度(例如,如果框是baseline对齐)时,框的竖直对齐方式由vertical-align属性决定。所以class = main的div的伪元素跟“我是居中的元素”形成了一个行内框，而设置行内框的对齐方式为middle，就居中了。
+
+## 7、如何用 css 或 js 实现多行文本溢出省略效果，考虑兼容性 
+
+单行：
+```css
+overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+```
+多行：
+```css
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 3; //行数
+overflow: hidden;
+```
+兼容：
+```css
+p{
+  position: relative; 
+  line-height: 20px;
+  max-height: 40px;
+  overflow: hidden;
+}
+p::after{
+  content: "..."; 
+  position: absolute;
+  bottom: 0; 
+  right: 0;
+  padding-left: 40px;
+  background: -webkit-linear-gradient(left, transparent, #fff 55%);
+  background: -o-linear-gradient(right, transparent, #fff 55%);
+  background: -moz-linear-gradient(right, transparent, #fff 55%);
+  background: linear-gradient(to right, transparent, #fff 55%);
+}
+```
