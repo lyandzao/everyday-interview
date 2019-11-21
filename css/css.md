@@ -165,3 +165,5 @@ opacity:0和display:none，若父节点元素应用了opacity:0和display:none�
 3. `<img src="1.jpg" style="width:480px!important; width:300px!important;">`
 4. `js修改`
 
+## 5、如何解决移动端 Retina 屏 1px 像素问题
+
