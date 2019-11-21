@@ -167,3 +167,4 @@ opacity:0和display:none，若父节点元素应用了opacity:0和display:none�
 
 ## 5、如何解决移动端 Retina 屏 1px 像素问题
 
+viewport + rem 实现 box-shadow background-image 0.5px transformY:scale(.5)
