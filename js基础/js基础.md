@@ -535,4 +535,54 @@ var b = 10;
 })();
 ```
 
-9.
+## 9.简单改造下面的代码，使之分别打印 10 和 20。
+
+```js
+var b = 10;
+(function b(){
+    b = 20;
+    console.log(b); 
+})();
+```
+
+解：
+
+1）打印10
+
+> ```js
+> var b = 10;
+> (function b(b) {
+>  window.b = 20;
+>  console.log(b)
+> })(b)
+> ```
+
+或者
+
+> ```js
+> var b = 10;
+> (function b(b) {
+>  b.b = 20;
+>  console.log(b)
+> })(b)
+> ```
+
+2）打印20
+
+> ```js
+> var b = 10;
+> (function b(b) {
+>  b = 20;
+>  console.log(b)
+> })(b)
+> ```
+
+或
+
+> ```js
+> var b = 10;
+> (function b() {
+>  var b = 20;
+>  console.log(b)
+> })()
+> ```
