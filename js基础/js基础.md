@@ -672,4 +672,26 @@ console.log(obj)
 
 原理：此时length长度设置为0，push方法从第0项开始插入，所以填充了第0项的empty 至于为什么对象添加了splice属性后并没有调用就会变成类数组对象这个问题，这是控制台中 DevTools 猜测类数组的一个方式： https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/event_listeners/EventListenersUtils.js#L330
 
-##
+## 13.call 和 apply 的区别是什么，哪个性能更好一些
+
+1. Function.prototype.apply和Function.prototype.call 的作用是一样的，区别在于传入参数的不同；
+2. 第一个参数都是，指定函数体内this的指向；
+3. 第二个参数开始不同，apply是传入带下标的集合，数组或者类数组，apply把它传给函数作为参数，call从第二个开始传入的参数是不固定的，都会传给函数作为参数。
+4. call比apply的性能要好，平常可以多用call, call传入参数的格式正是内部所需要的格式，参考[call和apply的性能对比](https://github.com/noneven/__/issues/6)
+
+以前看jQuery源码的时候有看到在源码的注释中有些过call的性能会比apply好，在lodash的源码中也同样的发现有call比apply性能更好的注释，这里我在[jsperf](https://jsperf.com/)上写了几个test case，验证了一下确实call比apply的性能更好。
+
+- 0、lodash源码apply方法重写
+  [![img](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapply.png)](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapply.png)
+- 1、无指向无参数对比:
+  [![img](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf.png)](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf.png)
+- 2、有指向无参数对比:
+  [![img](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf1.png)](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf1.png)
+- 3、无参数有指向:
+  [![img](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf2.png)](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf2.png)
+- 4、有参数有指向对比:
+  [![img](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf3.png)](https://raw.githubusercontent.com/coderwin/__/master/src/asserts/callapplyperf3.png)
+
+总结: 在我们平时的开发中其实不必关注call和apply的性能问题，但是可以尽可能的去用call，特别是es6的reset解构的支持，call基本可以代替apply，可以看出lodash源码里面并没有直接用Function.prototype.apply，而是在参数较少(1-3)个时采用call的方式调用(因为lodash里面没有超过4个参数的方法，PS如果一个函数的设计超过4个入参，那么这个函数就要考虑重构了)
+
+## 14.
