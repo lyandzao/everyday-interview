@@ -438,7 +438,7 @@ var fs = require('fs');
 import a from 'a';
 ```
 
-## 6.全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？
+## 7.全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？
 
 在ES5中，顶层对象的属性和全局变量是等价的，var 命令和 function 命令声明的全局变量，自然也是顶层对象。
 
@@ -475,3 +475,64 @@ const bb = 2;
 console.log(aa); // 1
 console.log(bb); // 2
 ```
+
+## 8.下面的代码打印什么内容，为什么？
+
+```js
+var b = 10;
+(function b(){
+    b = 20;
+    console.log(b); 
+})();
+```
+
+几个例子：
+
+```js
+var b = 10;
+(function b() {
+   // 内部作用域，会先去查找是有已有变量b的声明，有就直接赋值20，确实有了呀。发现了具名函数 function b(){}，拿此b做赋值；
+   // IIFE的函数无法进行赋值（内部机制，类似const定义的常量），所以无效。
+  // （这里说的“内部机制”，想搞清楚，需要去查阅一些资料，弄明白IIFE在JS引擎的工作方式，堆栈存储IIFE的方式等）
+    b = 20;
+    console.log(b); // [Function b]
+    console.log(window.b); // 10，不是20
+})();
+```
+
+所以严格模式下能看到错误：`Uncaught TypeError: Assignment to constant variable`
+
+```js
+var b = 10;
+(function b() {
+  'use strict'
+  b = 20;
+  console.log(b)
+})() // "Uncaught TypeError: Assignment to constant variable."
+```
+
+其他情况例子：
+
+有`window`：
+
+```js
+var b = 10;
+(function b() {
+    window.b = 20; 
+    console.log(b); // [Function b]
+    console.log(window.b); // 20是必然的
+})();
+```
+
+有`var`:
+
+```js
+var b = 10;
+(function b() {
+    var b = 20; // IIFE内部变量
+    console.log(b); // 20
+   console.log(window.b); // 10 
+})();
+```
+
+9.
