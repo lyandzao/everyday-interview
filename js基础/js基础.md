@@ -607,3 +607,17 @@ var a = 10;
 在立即执行函数中，`var a = 20;` 语句定义了一个局部变量 `a`，由于js的变量声明提升机制，局部变量`a`的声明会被提升至立即执行函数的函数体最上方，且由于这样的提升并不包括赋值，因此第一条打印语句会打印`undefined`，最后一条语句会打印`20`。
 
 由于变量声明提升，`a = 5;` 这条语句执行时，局部的变量`a`已经声明，因此它产生的效果是对局部的变量`a`赋值，此时`window.a` 依旧是最开始赋值的`10`，
+
+## 11.使用 sort() 对数组 [3, 15, 8, 29, 102, 22] 进行排序，输出结果
+
+我的答案：
+
+```
+[102, 15, 22, 29, 3, 8]
+```
+
+解析：
+
+根据MDN上对`Array.sort()`的解释，默认的排序方法会将数组元素转换为字符串，然后比较字符串中字符的UTF-16编码顺序来进行排序。所以`'102'` 会排在 `'15'` 前面。以下是MDN中的解释原文：
+
+> The sort() method sorts the elements of an array in place and returns the array. The default sort order is built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
