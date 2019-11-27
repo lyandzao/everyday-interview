@@ -759,3 +759,5 @@ function newFunc(father, ...rest) {
 
 ## 18.为什么普通 `for` 循环的性能远远高于 `forEach` 的性能，请解释其中的原因。
 
+循环条件中不涉及计算时确实如此，但是若设计计算，forEach的性能反而好一些
+
