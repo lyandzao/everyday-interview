@@ -1154,3 +1154,91 @@ console.log('two time', t3 - t2)
 - 第二个循环的 j 的初始化次数是 1w 次， k 的初始化次数是 1000w 次
 
 所以相同循环次数，外层越大，越影响性能
+
+## 31.输出以下代码执行结果
+
+```js
+function wait() {
+  return new Promise(resolve =>
+    setTimeout(resolve, 10 * 1000)
+  )
+}
+
+async function main() {
+  console.time();
+  const x = wait();
+  const y = wait();
+  const z = wait();
+  await x;
+  await y;
+  await z;
+  console.timeEnd();
+}
+main();
+```
+
+`Promise` 内部代码块是按序执行。和普通的代码执行顺序没区别。只是在调用`then()`时 返回了代码块中`resolve()`返回的结果，其他没有任何buf加成。 `async function`是为了处理`Promise.resolve()`以便即时获取到返回结果,`await`获得`resolve()`或`reject()`返回的结果后会继续执行(所以`resolve()`或`reject()`在哪，决定了它什么时候执行完，继续往下执行) 示例1： 将`resolve()` 放在同步代码块中
+
+```js
+function wait() {
+  return new Promise(resolve =>{
+    console.log(1);
+    resolve();
+    setTimeout(function(){
+      console.log(3);
+      // resolve();
+      console.log(4);
+    }, 3* 1000);
+     console.log(2);
+  }
+ )
+}
+
+async function main() {
+  console.time();
+  const x = wait();
+  const y = wait();
+  const z = wait();
+  await x;
+  await y;
+  await z;
+  console.timeEnd();
+}
+main();
+```
+
+![image](https://user-images.githubusercontent.com/23008329/63481802-5086e880-c4c9-11e9-8ac3-f9c1a107729e.png)
+
+示例2：将`resolve()`放到异步回调中
+
+```js
+function wait() {
+  return new Promise(resolve =>{
+    console.log(1);
+    // resolve();
+    setTimeout(function(){
+      console.log(3);
+      resolve();
+      console.log(4);
+    }, 3* 1000);
+     console.log(2);
+  }
+ )
+}
+
+async function main() {
+  console.time();
+  const x = wait();
+  const y = wait();
+  const z = wait();
+  await x;
+  await y;
+  await z;
+  console.timeEnd();
+}
+main();
+```
+
+![image](https://user-images.githubusercontent.com/23008329/63481972-acea0800-c4c9-11e9-9b68-502ea53751ba.png)
+
+`await`要得到结果才会继续执行，没有就一直等待，不会执行后面的代码。
