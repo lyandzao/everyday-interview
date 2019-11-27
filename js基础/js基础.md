@@ -768,3 +768,69 @@ function newFunc(father, ...rest) {
 得出结论：**消耗时间几乎一致，差异可以忽略不计**
 
 JavaScript 没有真正意义上的数组，所有的数组其实是对象，其“索引”看起来是数字，其实会被转换成字符串，作为属性名（对象的 key）来使用。所以无论是取第 1 个还是取第 10 万个元素，都是用 key 精确查找哈希表的过程，其消耗时间大致相同。 @lvtraveler 请帮忙测试下稀松数组。
+
+## 20.输出以下代码运行结果
+
+```js
+// example 1
+var a={}, b='123', c=123;  
+a[b]='b';
+a[c]='c';  
+console.log(a[b]);
+
+---------------------
+// example 2
+var a={}, b=Symbol('123'), c=Symbol('123');  
+a[b]='b';
+a[c]='c';  
+console.log(a[b]);
+
+---------------------
+// example 3
+var a={}, b={key:'123'}, c={key:'456'};  
+a[b]='b';
+a[c]='c';  
+console.log(a[b]);
+```
+
+这题考察的是对象的键名的转换。
+
+- 对象的键名只能是字符串和 Symbol 类型。
+- 其他类型的键名会被转换成字符串类型。
+- 对象转字符串默认会调用 toString 方法。
+
+```js
+// example 1
+var a={}, b='123', c=123;
+a[b]='b';
+
+// c 的键名会被转换成字符串'123'，这里会把 b 覆盖掉。
+a[c]='c';  
+
+// 输出 c
+console.log(a[b]);
+// example 2
+var a={}, b=Symbol('123'), c=Symbol('123');  
+
+// b 是 Symbol 类型，不需要转换。
+a[b]='b';
+
+// c 是 Symbol 类型，不需要转换。任何一个 Symbol 类型的值都是不相等的，所以不会覆盖掉 b。
+a[c]='c';
+
+// 输出 b
+console.log(a[b]);
+// example 3
+var a={}, b={key:'123'}, c={key:'456'};  
+
+// b 不是字符串也不是 Symbol 类型，需要转换成字符串。
+// 对象类型会调用 toString 方法转换成字符串 [object Object]。
+a[b]='b';
+
+// c 不是字符串也不是 Symbol 类型，需要转换成字符串。
+// 对象类型会调用 toString 方法转换成字符串 [object Object]。这里会把 b 覆盖掉。
+a[c]='c';  
+
+// 输出 c
+console.log(a[b]);
+```
