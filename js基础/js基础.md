@@ -834,3 +834,39 @@ a[c]='c';
 // 输出 c
 console.log(a[b]);
 ```
+
+## 21.input 搜索如何防抖，如何处理中文输入
+
+### 简易防抖
+
+```js
+<div>
+    <input type="text" id="ipt">
+  </div>
+
+  <script>
+    let ipt = document.getElementById('ipt');
+    let dbFun = debounce()
+    ipt.addEventListener('keyup', function (e) {
+      dbFun(e.target.value);
+    })
+
+    function debounce() {
+      let timer;
+      return function (value) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          console.log(value)
+        }, 500);
+      }
+    }
+  </script>
+```
+
+处理中文:[参考](https://segmentfault.com/a/1190000012490380)
+事件：compositionstart & compositionend
+
+在 `MDN` 上找到了关于他们的描述，[compositionstart](https://developer.mozilla.org/en-US/docs/Web/Events/compositionstart) 和 [compositionend](https://developer.mozilla.org/en-US/docs/Web/Events/compositionend)。简单点描述如下：
+
+- compositionstart：在输入中文或者语音等需要等待一连串的输入的操作之前，`compositionstart` 事件会触发。
+- compositionend：在输入中文或者语音等完毕或取消时，`compositionend` 事件会触发。
