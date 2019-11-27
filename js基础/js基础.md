@@ -740,3 +740,9 @@ function newFunc(father, ...rest) {
   return result;
 }
 ```
+
+## 16.`a.b.c.d` 和 `a['b']['c']['d']`，哪个性能更高
+
+应该是 `a.b.c.d` 比 `a['b']['c']['d']` 性能高点，后者还要考虑 `[ ]` 中是变量的情况，再者，从两种形式的结构来看，显然编译器解析前者要比后者容易些，自然也就快一点。 下图是两者的 AST 对比： ![image](https://user-images.githubusercontent.com/9009389/56872978-501d9a00-6a61-11e9-9e69-85ff00c031fc.png)
+
+## 17.
