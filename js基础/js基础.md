@@ -1124,3 +1124,33 @@ hello Tom 1、首先在进入函数作用域当中，获取name属性 2、在当
 "a" + + "b"
 ```
 
+## 30.为什么 for 循环嵌套顺序会影响性能？
+
+```js
+var t1 = new Date().getTime()
+for (let i = 0; i < 100; i++) {
+  for (let j = 0; j < 1000; j++) {
+    for (let k = 0; k < 10000; k++) {
+    }
+  }
+}
+var t2 = new Date().getTime()
+console.log('first time', t2 - t1)
+
+for (let i = 0; i < 10000; i++) {
+  for (let j = 0; j < 1000; j++) {
+    for (let k = 0; k < 100; k++) {
+
+    }
+  }
+}
+var t3 = new Date().getTime()
+console.log('two time', t3 - t2)
+```
+
+两个循环的次数的是一样的，但是 j 与 k 的初始化次数是不一样的
+
+- 第一个循环的 j 的初始化次数是 100 次，k 的初始化次数是 10w 次
+- 第二个循环的 j 的初始化次数是 1w 次， k 的初始化次数是 1000w 次
+
+所以相同循环次数，外层越大，越影响性能
