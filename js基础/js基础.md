@@ -745,4 +745,17 @@ function newFunc(father, ...rest) {
 
 应该是 `a.b.c.d` 比 `a['b']['c']['d']` 性能高点，后者还要考虑 `[ ]` 中是变量的情况，再者，从两种形式的结构来看，显然编译器解析前者要比后者容易些，自然也就快一点。 下图是两者的 AST 对比： ![image](https://user-images.githubusercontent.com/9009389/56872978-501d9a00-6a61-11e9-9e69-85ff00c031fc.png)
 
-## 17.
+## 17.ES6 代码转成 ES5 代码的实现思路是什么
+
+那么 Babel 是如何把 ES6 转成 ES5 呢，其大致分为三步：
+
+- 将代码字符串解析成抽象语法树，即所谓的 AST
+- 对 AST 进行处理，在这个阶段可以对 ES6 代码进行相应转换，即转成 ES5 代码
+- 根据处理后的 AST 再生成代码字符串
+
+基于此，其实我们自己就可以实现一个简单的“编译器”，用于把 ES6 代码转成 ES5。
+
+比如，可以使用 `@babel/parser` 的 `parse` 方法，将代码字符串解析成 AST；使用 `@babel/core` 的 `transformFromAstSync` 方法，对 AST 进行处理，将其转成 ES5 并生成相应的代码字符串；过程中，可能还需要使用 `@babel/traverse` 来获取依赖文件等。对此感兴趣的可以看看[这个](https://github.com/FishPlusOrange/easy-webpack)。
+
+## 18.为什么普通 `for` 循环的性能远远高于 `forEach` 的性能，请解释其中的原因。
+
