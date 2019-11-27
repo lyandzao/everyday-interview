@@ -1064,3 +1064,35 @@ typeof str2 // "object"
 
 1. `==`时做了隐式转换，调用了toString
 2. 2者类型不一样，一个是`string`，一个是`object`
+
+## 27.请写出如下代码的打印结果
+
+```js
+var name = 'Tom';
+(function() {
+if (typeof name == 'undefined') {
+  var name = 'Jack';
+  console.log('Goodbye ' + name);
+} else {
+  console.log('Hello ' + name);
+}
+})();
+```
+
+```js
+var name = 'Tom';
+(function() {
+    console.info('name', name);
+    console.info('typeof name', typeof name);
+    if (typeof name == 'undefined') {
+        var name = 'Jack';
+        console.log('Goodbye ' + name);
+    } else {
+        console.log('Hello ' + name);
+    }
+})();
+name undefined
+typeof name undefined
+Goodbye Jack
+```
+
