@@ -1242,3 +1242,48 @@ main();
 ![image](https://user-images.githubusercontent.com/23008329/63481972-acea0800-c4c9-11e9-9b68-502ea53751ba.png)
 
 `await`要得到结果才会继续执行，没有就一直等待，不会执行后面的代码。
+
+## 32.输出以下代码执行结果，大致时间就好（不同于上题）
+
+```js
+function wait() {
+  return new Promise(resolve =>
+    setTimeout(resolve, 10 * 1000)
+  )
+}
+
+async function main() {
+  console.time();
+  await wait();
+  await wait();
+  await wait();
+  console.timeEnd();
+}
+main();
+```
+
+先说结果，大概30秒多点，30秒是因为每个等待10秒，同步执行。 其实还有一个变种：
+
+```javascript
+function wait() {
+  return new Promise(resolve =>
+    setTimeout(resolve, 10 * 1000)
+  )
+}
+
+async function main() {
+  console.time();
+  let a = wait();
+  let b = wait();
+  let c = wait();
+  await a;
+  await b;
+  await c;
+  console.timeEnd();
+}
+main();
+```
+
+这个的运行时间是10s多一点，这是因为：a，b，c的异步请求会按顺序发起。而这个过程是不需要互相依赖等待的。等到wait的时候，其实是比较那个异步耗时最多。就会等待最长。最长的耗时就是整体的耗时。
+
+如果在业务中，两个异步没有依赖关系。应该是后面这种写法。
