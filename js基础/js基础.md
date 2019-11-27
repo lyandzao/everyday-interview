@@ -941,3 +941,98 @@ let a = 1
 #### 参考
 
 [HTTPS 到底加密了什么？](https://zhuanlan.zhihu.com/p/38278311) <br />[Web 端反爬虫技术方案](https://juejin.im/post/5b6d579cf265da0f6e51a7e0) <br />[可以说的秘密-那些我们该讨论的前端加密方法](https://juejin.im/entry/5bc93545e51d450e5f3dceff) <br />[前端加密那点事](https://juejin.im/post/5c452021518825242062979f) <br />[关于反爬虫，看这一篇就够了](https://segmentfault.com/a/1190000005840672)
+
+## 24.写出如下代码的打印结果
+
+```js
+function changeObjProperty(o) {
+  o.siteUrl = "http://www.baidu.com"
+  o = new Object()
+  o.siteUrl = "http://www.google.com"
+} 
+let webSite = new Object();
+changeObjProperty(webSite);
+console.log(webSite.siteUrl);
+```
+
+```javascript
+// 这里把o改成a
+// webSite引用地址的值copy给a了
+function changeObjProperty(a) {
+  // 改变对应地址内的对象属性值
+  a.siteUrl = "http://www.baidu.com"
+  // 变量a指向新的地址 以后的变动和旧地址无关
+  a = new Object()
+  a.siteUrl = "http://www.google.com"
+  a.name = 456
+} 
+var webSite = new Object();
+webSite.name = '123'
+changeObjProperty(webSite);
+console.log(webSite); // {name: 123, siteUrl: 'http://www.baidu.com'}
+```
+
+## 25.请写出如下代码的打印结果
+
+```js
+function Foo() {
+Foo.a = function() {
+console.log(1)
+}
+this.a = function() {
+console.log(2)
+}
+}
+Foo.prototype.a = function() {
+console.log(3)
+}
+Foo.a = function() {
+console.log(4)
+}
+Foo.a();
+let obj = new Foo();
+obj.a();
+Foo.a();
+```
+
+输出顺序是 4 2 1 .
+
+```javascript
+function Foo() {
+    Foo.a = function() {
+        console.log(1)
+    }
+    this.a = function() {
+        console.log(2)
+    }
+}
+// 以上只是 Foo 的构建方法，没有产生实例，此刻也没有执行
+
+Foo.prototype.a = function() {
+    console.log(3)
+}
+// 现在在 Foo 上挂载了原型方法 a ，方法输出值为 3
+
+Foo.a = function() {
+    console.log(4)
+}
+// 现在在 Foo 上挂载了直接方法 a ，输出值为 4
+
+Foo.a();
+// 立刻执行了 Foo 上的 a 方法，也就是刚刚定义的，所以
+// # 输出 4
+
+let obj = new Foo();
+/* 这里调用了 Foo 的构建方法。Foo 的构建方法主要做了两件事：
+1. 将全局的 Foo 上的直接方法 a 替换为一个输出 1 的方法。
+2. 在新对象上挂载直接方法 a ，输出值为 2。
+*/
+
+obj.a();
+// 因为有直接方法 a ，不需要去访问原型链，所以使用的是构建方法里所定义的 this.a，
+// # 输出 2
+
+Foo.a();
+// 构建方法里已经替换了全局 Foo 上的 a 方法，所以
+// # 输出 1
+```
